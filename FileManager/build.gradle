@@ -1,14 +1,15 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
 android {
-    namespace 'com.android.filemanager'
+    namespace 'androidx.compose.filemanager'
     compileSdk 34
 
     defaultConfig {
-        minSdk 24
+        minSdk 26
         targetSdk 34
     }
 
@@ -24,11 +25,40 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures { compose true }
+    composeOptions { kotlinCompilerExtensionVersion '1.4.5' }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
 }
 
 dependencies {
-
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.activity:activity-compose:1.7.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
+    implementation "androidx.compose.ui:ui:1.4.3"
+    implementation 'androidx.compose.material:material:1.4.3'
 }
+afterEvaluate {
+    publishing {
+        publications {
+            def today = new Date().format('yyyyMMdd')
+            release(MavenPublication) {
+                from components.release
+                groupId = 'androidx.compose.filemanager'
+                artifactId = 'filemanager'
+                version = "1.0-$today"
+            }
+        }
+        repositories {
+            mavenLocal()
+            maven {
+                url uri('D:\\repository\\repository\\repository')
+            }
+        }
+    }
+}
+//gradlew publish
