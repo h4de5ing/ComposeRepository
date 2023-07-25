@@ -97,14 +97,29 @@ fun FileList(
     } else {
         var checkedIndex by remember { mutableStateOf(-1) }
         var fileName by remember { mutableStateOf("") }
+        var filePath by remember { mutableStateOf("") }
         LazyColumn(modifier = Modifier.background(MaterialTheme.colors.surface)) {
             item {
                 if (!isFile) OutlinedTextField(modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = stringResource(id = R.string.file_name)) },
                     value = fileName,
                     singleLine = true,
-                    onValueChange = { fileName = it })
+                    onValueChange = {
+                        fileName = it
+                        //下面这一个代码块的作用是，解决当选择了文件夹目录后，更改文件名不生效问题。
+                        if (filePath != "") {
+                            //此行的作用是，当已经选择了文件夹目录，却又把文件名给删除了，此时应该返回一个空路径
+                            if (fileName == "") onCheckedChange(File(""))
+                            //此行的作用是，当已经选择了文件夹目录，改变文件名后，应当返回最新的path
+                            else onCheckedChange(File("${filePath}${File.separator}${fileName}"))
+                        }
+                    })
             }
+            //此行作用是解决当选择文件夹时，在上一级目录已经勾选了，点入下一级目录后同一个index位置的文件夹也会自动勾选的问题。
+            checkedIndex = -1
+            //此行的作用是 当只写了文件名没有选择目录，应当返回一个空路径
+            onCheckedChange(File(""))
+            filePath = ""
             itemsIndexed(files, key = { _, item -> item.name }) { index, item ->
                 FileItem(
                     isFile = isFile, file = item, onClick = onFileClick, checkedIndex == index
@@ -116,7 +131,11 @@ fun FileList(
                         if (TextUtils.isEmpty(fileName)) {
                             Toast.makeText(context, R.string.file_name_tips, Toast.LENGTH_SHORT)
                                 .show()
-                        } else onCheckedChange(File("${it}${File.separator}${fileName}"))
+                        } else {
+                            checkedIndex = index
+                            filePath = it.toString()
+                            onCheckedChange(File("${filePath}${File.separator}${fileName}"))
+                        }
                     }
                 }
                 Divider(thickness = 0.2.dp, color = MaterialTheme.colors.onSurface)
