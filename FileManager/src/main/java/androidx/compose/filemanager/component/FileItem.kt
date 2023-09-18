@@ -1,4 +1,5 @@
 package androidx.compose.filemanager.component
+
 import androidx.compose.filemanager.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,8 +55,8 @@ fun FileItem(
             modifier = Modifier.size(50.dp),
             tint = MaterialTheme.colors.onSurface,
         )
-        Spacer(modifier = Modifier.width(20.dp))
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Spacer(modifier = Modifier.width(10.dp))
+        Column(modifier = Modifier.weight(7f)) {
             Text(
                 text = file.name,
                 fontSize = 16.sp,
@@ -65,34 +66,33 @@ fun FileItem(
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = getFullDateTimeString(file.lastModified()),
-                    style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Light),
-                    color = MaterialTheme.colors.onSurface,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                if (file.isFile) {
-                    Text(
-                        text = getFileSizeShortString(file.length()),
-                        style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Light),
-                        color = MaterialTheme.colors.onSurface,
-                        maxLines = 1,
-                    )
-                }
-                if (isFile) {
-                    if (file.isFile)
-                        Checkbox(checked = checked, onCheckedChange = {
-                            onCheckedChange(file)
-                        })
-                } else {
-                    if (file.isDirectory)
-                        Checkbox(checked = checked, onCheckedChange = {
-                            onCheckedChange(file)
-                        })
-                }
-            }
+            Text(
+                text = getFullDateTimeString(file.lastModified()),
+                style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Light),
+                color = MaterialTheme.colors.onSurface,
+                maxLines = 1,
+            )
+        }
+        Spacer(modifier = Modifier.weight(0.5f))
+        if (file.isFile) {
+            Text(
+                text = getFileSizeShortString(file.length()),
+                style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Light),
+                color = MaterialTheme.colors.onSurface,
+                maxLines = 1,
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+        }
+        if (isFile) {
+            if (file.isFile)
+                Checkbox(checked = checked, onCheckedChange = {
+                    onCheckedChange(file)
+                })
+        } else {
+            if (file.isDirectory)
+                Checkbox(checked = checked, onCheckedChange = {
+                    onCheckedChange(file)
+                })
         }
     }
 }
