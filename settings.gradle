@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "ComposeRepository"
 include ':app'
 include ':FileManager'
+include ':ComposeView'

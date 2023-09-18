@@ -11,6 +11,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/ComposeView" />
             <option value="$PROJECT_DIR$/FileManager" />
             <option value="$PROJECT_DIR$/app" />
           </set>
