@@ -24,6 +24,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -95,7 +96,7 @@ fun FileList(
                 .fillMaxSize()
         )
     } else {
-        var checkedIndex by remember { mutableStateOf(-1) }
+        var checkedIndex by remember { mutableIntStateOf(-1) }
         var fileName by remember { mutableStateOf("") }
         var filePath by remember { mutableStateOf("") }
         LazyColumn(modifier = Modifier.background(MaterialTheme.colors.surface)) {
